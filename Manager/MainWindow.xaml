@@ -1,0 +1,84 @@
+﻿<Window x:Class="Manager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Manager"
+        xmlns:vm="clr-namespace:Manager.viewmodel"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <vm:FileManagerViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <StackPanel HorizontalAlignment="Left" Height="424" Margin="2,0,0,0" VerticalAlignment="Top" Width="186" Background="#FFE5D3D3">
+
+            <StackPanel>
+                <StackPanel.Resources>
+                    <DataTemplate x:Key="NavfolderDataTemplate">
+
+                            
+                       
+                    </DataTemplate>
+                </StackPanel.Resources>
+                <StackPanel.Style>
+                    <Style TargetType="{x:Type StackPanel}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding FavouriteFolders.Count, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding FavouriteFolders.Count, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <TextBlock Height="22" Text="Favourite" TextWrapping="Wrap" Width="117"/>
+                <ItemsControl 
+           
+                    ItemsSource="{Binding FavouriteFolders, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+            <TextBlock Height="21" Text="RemoteFolders" TextWrapping="Wrap" Width="116"/>
+            <ItemsControl ItemsSource="{Binding RemoteFolders, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Height="21" Text="Library" TextWrapping="Wrap" Width="116"/>
+            <ItemsControl  ItemsSource="{Binding LibraryFolders, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Height="21" Text="Devices" TextWrapping="Wrap" Width="116"/>
+            <ItemsControl  ItemsSource="{Binding ConnectedDevices, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        <TextBox HorizontalAlignment="Left" Height="22" Margin="285,70,0,0" Text="{Binding CurrentDirectory, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="505"/>
+        <Button x:Name="btnBack" Content="" HorizontalAlignment="Left" Height="22" Margin="188,70,0,0" VerticalAlignment="Top" Width="26">
+            <Button.Background>
+                <ImageBrush ImageSource="/left-arrow-png-favpng-6Gwhnr9LgVfP33gZFFkJDnSni.jpg"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="btnForward" Content="" HorizontalAlignment="Left" Height="22" Margin="219,70,0,0" VerticalAlignment="Top" Width="27" RenderTransformOrigin="0.5,0.5">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="179.021"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Background>
+                <ImageBrush ImageSource="/left-arrow-png-favpng-6Gwhnr9LgVfP33gZFFkJDnSni.jpg"/>
+            </Button.Background>
+        </Button>
+        <Button Content="Button" HorizontalAlignment="Left" Height="22" Margin="251,70,0,0" VerticalAlignment="Top" Width="30"/>
+        <TextBox x:Name="txtSearch" HorizontalAlignment="Left" Height="19" Margin="621,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="169"/>
+        <TextBox HorizontalAlignment="Left" Height="19" Margin="559,46,0,0" Text="Search" TextWrapping="Wrap" VerticalAlignment="Top" Width="57"/>
+        <ListView x:Name="listView" HorizontalAlignment="Left" Height="334" Margin="200,100,0,0" 
+                  VerticalAlignment="Top" Width="590" 
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  SelectionMode="Extended"
+                  ItemsSource="{Binding NavigationFolderFiles, UpdateSourceTrigger=PropertyChanged}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </Grid>
+</Window>
