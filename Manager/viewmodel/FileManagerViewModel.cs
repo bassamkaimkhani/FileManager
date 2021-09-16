@@ -11,6 +11,10 @@ using System.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
 using System.Windows;
 using System.Windows.Media;
+using Microsoft.VisualBasic.FileIO;
+using System.Linq;
+using System.Threading;
+
 
 namespace Manager.viewmodel
 {
@@ -22,8 +26,8 @@ namespace Manager.viewmodel
             PropertyChanged?.Invoke(sender: this, e: new PropertyChangedEventArgs(propertyName));
         }
 
-       // readonly ResourceDictionary _icondictionary = System.Windows.Application.LoadComponent(new Uri("/Manager/Icons.xaml", UriKind.RelativeOrAbsolute)) as ResourceDictionary;
-    
+         readonly ResourceDictionary _icondictionary = System.Windows.Application.LoadComponent(new Uri("/Manager;component/Resource/Icons.xaml", UriKind.RelativeOrAbsolute)) as ResourceDictionary;
+
         public string PreviousDirectory { get; set; }
         public string CurrentDirectory { get; set; }
         public string NextDirectory { get; set; }
@@ -39,29 +43,70 @@ namespace Manager.viewmodel
         private BackgroundWorker bgGetFilesBackGroundWorker = new BackgroundWorker()
         {
             WorkerReportsProgress = true,
-            WorkerSupportsCancellation=true
+            WorkerSupportsCancellation = true
         };
         void LoadDirectory(FileMangerModel fileMangerModel)
         {
             NavigationFolderFiles.Clear();
             tempFolderCollection = null;
-            if (!bgGetFilesBackGroundWorker.IsBusy) return;
-            bgGetFilesBackGroundWorker.CancelAsync();
+            if (!bgGetFilesBackGroundWorker.IsBusy)
+                bgGetFilesBackGroundWorker.CancelAsync();
+
             bgGetFilesBackGroundWorker.RunWorkerAsync(fileMangerModel);
         }
-        
+
+        internal bool isDirectory(string filename)
+        {
+            var attr = FileAttributes.Normal;
+            try
+            {
+                attr = File.GetAttributes(filename);
+            }
+            catch
+            {
+                //ignore
+            }
+            return attr.HasFlag(FileAttributes.Directory);
+        }
+        internal string GetFileExtension(string fileName)
+        {
+            if (fileName == null) return string.Empty;
+            var extension = Path.GetExtension(fileName);
+            var cultureInfo = Thread.CurrentThread.CurrentCulture;
+            var textInfo = cultureInfo.TextInfo;
+            var data = textInfo.ToTitleCase(extension.Replace(" . ", string.Empty));
+            return data;
+        }
+
         private void BgGetFilesBackGroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            var fileOrFolder = (FileMangerModel)e.Argument;
+
         }
 
         private void BgGetFilesBackGroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            var filename = e.UserState.ToString();
+            var file = new FileMangerModel();
+            file.name = Path.GetFileName(filename);
+            file.path = filename;
+            file.isDirectory = isDirectory(filename);
+            file.fileExtension = GetFileExtension(filename);
 
+            NavigationFolderFiles.Add(file);
+            OnPropertyChanged(nameof(NavigationFolderFiles));
         }
 
         private void BgGetFilesBackGroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            var fileOrFolder = (FileMangerModel)e.Argument;
+            tempFolderCollection = new ReadOnlyCollectionBuilder<string>(FileSystem.GetDirectories(fileOrFolder.path)
+                .Concat(FileSystem.GetFiles(fileOrFolder.path))).ToReadOnlyCollection();
+            foreach (var filename in tempFolderCollection)
+            {
+                bgGetFilesBackGroundWorker.ReportProgress(1, filename);
+            }
+            CurrentDirectory = fileOrFolder.path;
+            OnPropertyChanged(nameof(CurrentDirectory));
         }
         public FileManagerViewModel()
         {
@@ -71,15 +116,16 @@ namespace Manager.viewmodel
                 {
                     name = "OneDrive",
                     isDirectory = true,
-                    path=Environment.GetEnvironmentVariable("OneDriveComsumer")
-                 
+                    path=Environment.GetEnvironmentVariable("OneDriveComsumer"),
+                    FileIcon =(PathGeometry)_icondictionary["OneDrive"]
+
                 },
                 new FileMangerModel
                 {
                     name = "Google Drive",
                     isDirectory = true,
-                    path=""
-
+                    path="",
+                    FileIcon =(PathGeometry)_icondictionary["Google Drive"]
                 },
             };
             LibraryFolders = new ObservableCollection<FileMangerModel>()
@@ -88,25 +134,26 @@ namespace Manager.viewmodel
                 {
                     name = "Desktop",
                     isDirectory = true,
-                    path=Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-
-
+                    path=Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                    FileIcon =(PathGeometry)_icondictionary["Desktop"]
                 },
                  new FileMangerModel
                 {
                     name = "Documents",
                     isDirectory = true,
-                    path=Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                    path=Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    FileIcon =(PathGeometry)_icondictionary["Documents"]
                 },
                    new FileMangerModel
                 {
                     name = "Downloads",
                     isDirectory = true,
-                    path= new KnownFolder(KnownFolderType.Downloads).Path
+                    path= new KnownFolder(KnownFolderType.Downloads).Path,
+                    FileIcon =(PathGeometry)_icondictionary["Downloads"]
                 },
             };
             ConnectedDevices = new ObservableCollection<FileMangerModel>();
-            foreach(var drive in DriveInfo.GetDrives())
+            foreach (var drive in DriveInfo.GetDrives())
             {
                 var Name = string.IsNullOrEmpty(drive.VolumeLabel) ? "Local Drive" : drive.VolumeLabel;
                 ConnectedDevices.Add(new FileMangerModel()
@@ -115,7 +162,7 @@ namespace Manager.viewmodel
                     path = drive.RootDirectory.FullName,
                     isDirectory = true,
 
-                }) ;
+                });
             };
             CurrentDirectory = @"C:\";
             OnPropertyChanged(nameof(CurrentDirectory));
@@ -123,6 +170,12 @@ namespace Manager.viewmodel
             bgGetFilesBackGroundWorker.DoWork += BgGetFilesBackGroundWorker_DoWork;
             bgGetFilesBackGroundWorker.ProgressChanged += BgGetFilesBackGroundWorker_ProgressChanged;
             bgGetFilesBackGroundWorker.RunWorkerCompleted += BgGetFilesBackGroundWorker_RunWorkerCompleted;
+
+            LoadDirectory(new FileMangerModel()
+            {
+                path = CurrentDirectory
+            });
+
 
         }
 
