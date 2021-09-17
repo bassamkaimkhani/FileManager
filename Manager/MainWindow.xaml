@@ -6,24 +6,18 @@
         xmlns:local="clr-namespace:Manager"
         xmlns:vm="clr-namespace:Manager.viewmodel"
         xmlns:cc="clr-namespace:Manager.CustomControl"
-        xmlns:model="clr-namespace:Manager.Model"
+        xmlns:model="clr-namespace:Manager.Model" 
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
         <vm:FileManagerViewModel/>
-        
     </Window.DataContext>
 
     <Grid>
         <StackPanel HorizontalAlignment="Left" Height="424" Margin="2,0,0,0" VerticalAlignment="Top" Width="186" Background="#FFE5D3D3">
-
             <StackPanel>
                 <StackPanel.Resources>
-                    <DataTemplate x:Key="NavfolderDataTemplate">
-                        <cc:DriveAndFolderButton
-                            Content="{Binding name, UpdateSourceTrigger=PropertyChanged}"
-                            />
-                    </DataTemplate>
+
                 </StackPanel.Resources>
                 <StackPanel.Style>
                     <Style TargetType="{x:Type StackPanel}">
@@ -35,26 +29,25 @@
                             <DataTrigger Binding="{Binding FavouriteFolders.Count, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
                             </DataTrigger>
-
                         </Style.Triggers>
                     </Style>
                 </StackPanel.Style>
                 <TextBlock Height="22" Text="Favourite" TextWrapping="Wrap" Width="117"/>
                 <ItemsControl 
-           
-                    ItemsSource="{Binding FavouriteFolders, UpdateSourceTrigger=PropertyChanged}"/>
+                    ItemsSource="{Binding FavouriteFolders, UpdateSourceTrigger=PropertyChanged}"
+                    ItemTemplate="{Binding name}"/>
             </StackPanel>
+            <cc:DriveAndFolderButton
+                Content="Games"
+                Icon="{StaticResource Folder}"/>
             <TextBlock Height="21" Text="RemoteFolders" TextWrapping="Wrap" Width="116"/>
             <ItemsControl 
-                ItemTemplate="{StaticResource NavfolderDataTemplate}"
                 ItemsSource="{Binding RemoteFolders, UpdateSourceTrigger=PropertyChanged}" />
-
-            <TextBlock Height="21" Text="Library" TextWrapping="Wrap" Width="116"/>
-
+            <TextBlock Height="21" Text="Library" TextWrapping="Wrap" Width="116" />
             <ItemsControl  
-                ItemTemplate="{Binding LibraryFolders, UpdateSourceTrigger=PropertyChanged}"
-                ItemsSource="{Binding LibraryFolders, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Height="21" Text="Devices" TextWrapping="Wrap" Width="116"/>
+                ItemsSource="{Binding LibraryFolders, UpdateSourceTrigger=PropertyChanged}"
+                />
+            <TextBlock Height="21" Text="Devices" TextWrapping="Wrap" Width="116" />
             <ItemsControl  ItemsSource="{Binding ConnectedDevices, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
         <TextBox HorizontalAlignment="Left" Height="22" Margin="285,70,0,0" Text="{Binding CurrentDirectory, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="505"/>
@@ -83,16 +76,13 @@
                   VerticalAlignment="Top" Width="590" 
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  SelectionMode="Extended">
+                  SelectionMode="Extended" ItemsSource="{Binding NavigationFolderFiles, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{Binding name, UpdateSourceTrigger=PropertyChanged}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
                 </GridView>
             </ListView.View>
-            <ListViewItem Content="ListViewItem"/>
-            <Style TargetType="{x:Type ListViewItem}">
-                <Setter Property="Content" Value="{Binding name}"/>
-            </Style>
+
         </ListView>
 
     </Grid>

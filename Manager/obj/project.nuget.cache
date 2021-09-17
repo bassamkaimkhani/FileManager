@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "rN/2AAreGVUTSGurUsy99aTubNuUmI3tpD3Ppvi2N/VfRtzKXC3fbd7g9jui/2N0BTnz4MySBb5z+02DLicf/g==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\bnasir\\OneDrive - Higher Education Commission\\Documents\\Manager\\Manager\\Manager.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\bnasir\\.nuget\\packages\\microsoft.visualbasic\\10.3.0\\microsoft.visualbasic.10.3.0.nupkg.sha512",
+    "C:\\Users\\bnasir\\.nuget\\packages\\syroot.windows.io.knownfolders\\1.2.3\\syroot.windows.io.knownfolders.1.2.3.nupkg.sha512",
+    "C:\\Users\\bnasir\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512"
+  ],
+  "logs": []
+}

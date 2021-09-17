@@ -31,3 +31,14 @@ namespace Manager.Commmands
         }
     }
 }
+
+/*
+private ICommand _openSettingCommand;
+public ICommand openSettingCommand
+{
+    get
+    {
+        return _openSettingCommand ?? (_openSettingCommand = new Commands(() => Process.Start("ms settings: home")));
+    }
+}
+*/

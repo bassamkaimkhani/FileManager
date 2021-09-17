@@ -14,6 +14,7 @@ using System.Windows.Media;
 using Microsoft.VisualBasic.FileIO;
 using System.Linq;
 using System.Threading;
+using System.Drawing;
 
 
 namespace Manager.viewmodel
@@ -21,12 +22,12 @@ namespace Manager.viewmodel
     class FileManagerViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged(string propertyName = null)
         {
             PropertyChanged?.Invoke(sender: this, e: new PropertyChangedEventArgs(propertyName));
         }
 
-         readonly ResourceDictionary _icondictionary = System.Windows.Application.LoadComponent(new Uri("/Manager;component/Resource/Icons.xaml", UriKind.RelativeOrAbsolute)) as ResourceDictionary;
+        readonly ResourceDictionary _icondictionary = System.Windows.Application.LoadComponent(new Uri("/Manager;component/Resource/Icons.xaml", UriKind.RelativeOrAbsolute)) as ResourceDictionary;
 
         public string PreviousDirectory { get; set; }
         public string CurrentDirectory { get; set; }
@@ -45,6 +46,7 @@ namespace Manager.viewmodel
             WorkerReportsProgress = true,
             WorkerSupportsCancellation = true
         };
+
         void LoadDirectory(FileMangerModel fileMangerModel)
         {
             NavigationFolderFiles.Clear();
@@ -110,6 +112,7 @@ namespace Manager.viewmodel
         }
         public FileManagerViewModel()
         {
+
             RemoteFolders = new ObservableCollection<FileMangerModel>()
             {
                 new FileMangerModel
@@ -175,18 +178,7 @@ namespace Manager.viewmodel
             {
                 path = CurrentDirectory
             });
-
-
         }
-
-
-        private ICommand _openSettingCommand;
-        public ICommand openSettingCommand
-        {
-            get
-            {
-                return _openSettingCommand ?? (_openSettingCommand = new Commands(() => Process.Start("ms settings: home")));
-            }
-        }
+ 
     }
 }

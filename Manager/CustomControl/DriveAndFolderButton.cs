@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -19,7 +18,7 @@ namespace Manager.CustomControl
 
         // Using a DependencyProperty as the backing store for Icon.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IconProperty =
-            DependencyProperty.Register("Icon", typeof(PathGeometry), typeof(DriveAndFolderButton), new PropertyMetadata(0));
+            DependencyProperty.Register("Icon", typeof(PathGeometry), typeof(DriveAndFolderButton));
 
 
     }
