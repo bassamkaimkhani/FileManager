@@ -17,6 +17,7 @@ using System.Threading;
 using System.Drawing;
 
 
+
 namespace Manager.viewmodel
 {
     class FileManagerViewModel : INotifyPropertyChanged
@@ -39,6 +40,14 @@ namespace Manager.viewmodel
         public ObservableCollection<FileMangerModel> ConnectedDevices { get; set; }
         public ObservableCollection<FileMangerModel> LibraryFolders { get; set; }
         public ObservableCollection<FileMangerModel> NavigationFolderFiles { get; set; }
+        public ObservableCollection<string> PathHistoryDetails { get; set; }
+        internal int position = 0;
+        public bool CanGoBack {get;set;}
+        public bool CanGoForward { get; set; }
+        public bool IsAtRootDirectory { get; set; }
+        public bool PathDisupted { get; set; }
+        public FileMangerModel parent { get; set; }
+
         internal ReadOnlyCollection<string> tempFolderCollection;
 
         private BackgroundWorker bgGetFilesBackGroundWorker = new BackgroundWorker()
@@ -47,7 +56,7 @@ namespace Manager.viewmodel
             WorkerSupportsCancellation = true
         };
 
-        void LoadDirectory(FileMangerModel fileMangerModel)
+        public void LoadDirectory(FileMangerModel fileMangerModel)
         {
             NavigationFolderFiles.Clear();
             tempFolderCollection = null;
@@ -69,6 +78,38 @@ namespace Manager.viewmodel
                 //ignore
             }
             return attr.HasFlag(FileAttributes.Directory);
+        }
+
+        public bool IsFileHidden(string filename)
+               {
+            var attr = FileAttributes.Normal;
+            try
+            {
+                attr = File.GetAttributes(filename);
+            }
+            catch
+            {
+                //ignore
+            }
+            return attr.HasFlag(FileAttributes.Hidden);
+        }
+
+        internal PathGeometry GetImageForExtension(FileMangerModel file)
+        {
+            var fileExtension = file.FileExtension;
+            if (Directory.Exists(file.path))
+                return (PathGeometry)_icondictionary["Folder"];
+
+            if(file.isImage)
+                return (PathGeometry)_icondictionary["ImageFile"];
+
+            if (file.isVideo)
+                return (PathGeometry)_icondictionary["VideoFile"];
+
+            if ((PathGeometry)_icondictionary[$"{fileExtension}File"]==null)
+                return (PathGeometry)_icondictionary["File"];
+
+            return (PathGeometry)_icondictionary[$"{fileExtension}File"];
         }
         internal string GetFileExtension(string fileName)
         {
@@ -92,23 +133,31 @@ namespace Manager.viewmodel
             file.name = Path.GetFileName(filename);
             file.path = filename;
             file.isDirectory = isDirectory(filename);
-            file.fileExtension = GetFileExtension(filename);
-
+            file.FileExtension = GetFileExtension(filename);
+            file.isHidden = IsFileHidden(filename);
+            file.FileIcon = GetImageForExtension(file);
             NavigationFolderFiles.Add(file);
             OnPropertyChanged(nameof(NavigationFolderFiles));
         }
 
         private void BgGetFilesBackGroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            var fileOrFolder = (FileMangerModel)e.Argument;
-            tempFolderCollection = new ReadOnlyCollectionBuilder<string>(FileSystem.GetDirectories(fileOrFolder.path)
-                .Concat(FileSystem.GetFiles(fileOrFolder.path))).ToReadOnlyCollection();
-            foreach (var filename in tempFolderCollection)
+            try
             {
-                bgGetFilesBackGroundWorker.ReportProgress(1, filename);
+                var fileOrFolder = (FileMangerModel)e.Argument;
+                tempFolderCollection = new ReadOnlyCollectionBuilder<string>(FileSystem.GetDirectories(fileOrFolder.path)
+                    .Concat(FileSystem.GetFiles(fileOrFolder.path))).ToReadOnlyCollection();
+                foreach (var filename in tempFolderCollection)
+                {
+                    bgGetFilesBackGroundWorker.ReportProgress(1, filename);
+                }
+                CurrentDirectory = fileOrFolder.path;
+                OnPropertyChanged(nameof(CurrentDirectory));
             }
-            CurrentDirectory = fileOrFolder.path;
-            OnPropertyChanged(nameof(CurrentDirectory));
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         public FileManagerViewModel()
         {
@@ -117,6 +166,7 @@ namespace Manager.viewmodel
             {
                 new FileMangerModel
                 {
+                   // parent=this,
                     name = "OneDrive",
                     isDirectory = true,
                     path=Environment.GetEnvironmentVariable("OneDriveComsumer"),
@@ -125,6 +175,7 @@ namespace Manager.viewmodel
                 },
                 new FileMangerModel
                 {
+                    //parent=this,
                     name = "Google Drive",
                     isDirectory = true,
                     path="",
@@ -135,6 +186,7 @@ namespace Manager.viewmodel
             {
                 new FileMangerModel
                 {
+                    //parent=this,
                     name = "Desktop",
                     isDirectory = true,
                     path=Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
@@ -142,6 +194,7 @@ namespace Manager.viewmodel
                 },
                  new FileMangerModel
                 {
+                    //parent=this,
                     name = "Documents",
                     isDirectory = true,
                     path=Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
@@ -149,6 +202,7 @@ namespace Manager.viewmodel
                 },
                    new FileMangerModel
                 {
+                   // parent=this,
                     name = "Downloads",
                     isDirectory = true,
                     path= new KnownFolder(KnownFolderType.Downloads).Path,
@@ -161,6 +215,7 @@ namespace Manager.viewmodel
                 var Name = string.IsNullOrEmpty(drive.VolumeLabel) ? "Local Drive" : drive.VolumeLabel;
                 ConnectedDevices.Add(new FileMangerModel()
                 {
+                   // parent = this,
                     name = $"{Name}({drive.Name.Replace(oldValue: @"\", newValue: "")})",
                     path = drive.RootDirectory.FullName,
                     isDirectory = true,
@@ -178,7 +233,43 @@ namespace Manager.viewmodel
             {
                 path = CurrentDirectory
             });
+
+            PathHistoryDetails = new ObservableCollection<string>();
+            PathHistoryDetails.Add(CurrentDirectory);
+
+            CanGoBack =position != 0;
+            OnPropertyChanged(nameof(CanGoBack));
+
+
         }
- 
+        protected ICommand goToPreviousDirectoryfile;
+        public ICommand GoToPreviousDirectoryfile => goToPreviousDirectoryfile ?? (goToPreviousDirectoryfile = new Commands(() =>
+        { 
+
+        }));
+        protected ICommand goToForwardDirectoryfile;
+        public ICommand GoToForwardDirectoryfile => goToForwardDirectoryfile ?? (goToForwardDirectoryfile = new Commands(() =>
+        {
+            
+        }));
+        protected ICommand _getfilesListCommand;
+        public ICommand GetFilesListCommand => _getfilesListCommand ?? (_getfilesListCommand = new RelayCommand((parameter) =>
+        {
+            var file = parameter as FileMangerModel;
+            if (file == null) return;
+            LoadDirectory(file);
+        }));
+       
+                protected ICommand navigateToPath;
+                public ICommand NavigateToPath => navigateToPath ?? (navigateToPath = new RelayCommand((parameter) =>
+                {
+                    var Path = parameter as string;
+                    if (!string.IsNullOrEmpty(Path))
+                        GetFilesListCommand.Execute(new FileMangerModel()
+                        {
+                            path = Path                  
+                        });
+                }));
+        
     }
 }

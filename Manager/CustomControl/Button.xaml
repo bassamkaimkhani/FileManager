@@ -14,7 +14,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type cc:DriveAndFolderButton}">
                     <Grid>
-                        <Path Data="{StaticResource Folder}"/>
+                        <Path x:Name="Path"
+                            Data="{Binding FileIcon}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

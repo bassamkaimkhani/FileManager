@@ -9,7 +9,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using Manager;
+using Manager.CustomControl;
+using Manager.Model;
 using Manager.View;
+using Manager.viewmodel;
+using Microsoft.Xaml.Behaviors;
+using Microsoft.Xaml.Behaviors.Core;
+using Microsoft.Xaml.Behaviors.Input;
+using Microsoft.Xaml.Behaviors.Layout;
+using Microsoft.Xaml.Behaviors.Media;
 using System;
 using System.Diagnostics;
 using System.Windows;

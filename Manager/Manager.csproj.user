@@ -12,13 +12,19 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="CustomControl\namebutton.xaml">
+    <Page Update="CustomControl\Button.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Resource\ListView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="View\FileManagerView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\ListViewItem.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

@@ -5,7 +5,6 @@ C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager
 C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\bin\Debug\netcoreapp3.1\Manager.dll
 C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\bin\Debug\netcoreapp3.1\Manager.pdb
 C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\bin\Debug\netcoreapp3.1\Syroot.KnownFolders.dll
-C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\obj\Debug\netcoreapp3.1\Manager.csproj.AssemblyReference.cache
 C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\obj\Debug\netcoreapp3.1\MainWindow.g.cs
 C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\obj\Debug\netcoreapp3.1\View\FileManagerView.g.cs
 C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\obj\Debug\netcoreapp3.1\App.g.cs
@@ -23,5 +22,9 @@ C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager
 C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\obj\Debug\netcoreapp3.1\Manager.dll
 C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\obj\Debug\netcoreapp3.1\Manager.pdb
 C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\obj\Debug\netcoreapp3.1\Manager.genruntimeconfig.cache
-C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\obj\Debug\netcoreapp3.1\CustomControl\namebutton.baml
 C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\obj\Debug\netcoreapp3.1\App.baml
+C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\obj\Debug\netcoreapp3.1\View\ListViewItem.baml
+C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\bin\Debug\netcoreapp3.1\Microsoft.Xaml.Behaviors.dll
+C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\obj\Debug\netcoreapp3.1\Manager.csproj.AssemblyReference.cache
+C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\obj\Debug\netcoreapp3.1\Resource\ListView.baml
+C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\obj\Debug\netcoreapp3.1\CustomControl\Button.baml

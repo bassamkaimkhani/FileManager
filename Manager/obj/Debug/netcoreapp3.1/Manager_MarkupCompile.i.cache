@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1;
 C:\Users\bnasir\OneDrive - Higher Education Commission\Documents\Manager\Manager\App.xaml
-3-1484342192
+5-172217915
 
 111516894779
-1931267189321
-CustomControl\namebutton.xaml;MainWindow.xaml;View\FileManagerView.xaml;
+1941677971923
+CustomControl\Button.xaml;MainWindow.xaml;Resource\ListView.xaml;View\FileManagerView.xaml;View\ListViewItem.xaml;
 
-True
+False
 

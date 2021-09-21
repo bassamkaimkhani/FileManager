@@ -7,8 +7,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resource/Icons.xaml"/>
-                <ResourceDictionary Source="CustomControl/namebutton.xaml"/>
-
+                <ResourceDictionary Source="CustomControl/Button.xaml"/>
+                <ResourceDictionary Source="Resource/ListView.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

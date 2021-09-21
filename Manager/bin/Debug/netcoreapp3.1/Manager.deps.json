@@ -9,6 +9,7 @@
       "Manager/1.0.0": {
         "dependencies": {
           "Microsoft.VisualBasic": "10.3.0",
+          "Microsoft.Xaml.Behaviors.Wpf": "1.1.31",
           "Syroot.Windows.IO.KnownFolders": "1.2.3"
         },
         "runtime": {
@@ -16,6 +17,14 @@
         }
       },
       "Microsoft.VisualBasic/10.3.0": {},
+      "Microsoft.Xaml.Behaviors.Wpf/1.1.31": {
+        "runtime": {
+          "lib/netcoreapp3.1/Microsoft.Xaml.Behaviors.dll": {
+            "assemblyVersion": "1.1.0.0",
+            "fileVersion": "1.1.31.10800"
+          }
+        }
+      },
       "Syroot.Windows.IO.KnownFolders/1.2.3": {
         "dependencies": {
           "System.Security.Principal.Windows": "4.7.0"
@@ -42,6 +51,13 @@
       "sha512": "sha512-AvMDjmJHjz9bdlvxiSdEHHcWP+sZtp7zwule5ab6DaUbgoBnwCsd7nymj69vSz18ypXuEv3SI7ZUNwbIKrvtMA==",
       "path": "microsoft.visualbasic/10.3.0",
       "hashPath": "microsoft.visualbasic.10.3.0.nupkg.sha512"
+    },
+    "Microsoft.Xaml.Behaviors.Wpf/1.1.31": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LZpuf82ACZWldmfMuv3CTUMDh3o0xo0uHUaybR5HgqVLDBJJ9RZLykplQ/bTJd0/VDt3EhD4iDgUgbdIUAM+Kg==",
+      "path": "microsoft.xaml.behaviors.wpf/1.1.31",
+      "hashPath": "microsoft.xaml.behaviors.wpf.1.1.31.nupkg.sha512"
     },
     "Syroot.Windows.IO.KnownFolders/1.2.3": {
       "type": "package",

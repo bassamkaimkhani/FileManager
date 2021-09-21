@@ -6,25 +6,40 @@
         xmlns:local="clr-namespace:Manager"
         xmlns:vm="clr-namespace:Manager.viewmodel"
         xmlns:cc="clr-namespace:Manager.CustomControl"
-        xmlns:model="clr-namespace:Manager.Model" 
+        xmlns:model="clr-namespace:Manager.Model" xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="FILE MANAGER" Height="450" Width="900" BorderBrush="Aqua" x:Name="mainWindow">
     <Window.DataContext>
         <vm:FileManagerViewModel/>
     </Window.DataContext>
+    <Grid Margin="0,0,0,-6">
+        <StackPanel HorizontalAlignment="Left" Height="385" VerticalAlignment="Top" Width="199" Background="LightSkyBlue" Margin="0,49,0,0" RenderTransformOrigin="0.5,0.5">
+            <StackPanel.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="-0.252"/>
+                    <RotateTransform/>
+                    <TranslateTransform X="0.796"/>
+                </TransformGroup>
+            </StackPanel.RenderTransform>
+            <StackPanel.Resources>
+                <DataTemplate x:Key="ButtonFunction">
+                    <Button Content="{Binding name, UpdateSourceTrigger=PropertyChanged}" 
+                            Background="{Binding}"
+                            BorderBrush="Transparent"                          
+                            HorizontalAlignment="Left"
+                            Command="{Binding DataContext.GetFilesListCommand,ElementName=mainWindow}"
+                            CommandParameter="{Binding}">
+                    </Button>
+                </DataTemplate>
+            </StackPanel.Resources>
 
-    <Grid>
-        <StackPanel HorizontalAlignment="Left" Height="424" Margin="2,0,0,0" VerticalAlignment="Top" Width="186" Background="#FFE5D3D3">
             <StackPanel>
-                <StackPanel.Resources>
-
-                </StackPanel.Resources>
                 <StackPanel.Style>
                     <Style TargetType="{x:Type StackPanel}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding FavouriteFolders.Count, UpdateSourceTrigger=PropertyChanged}" Value="0">
                                 <Setter Property="Visibility" Value="Collapsed"/>
-
                             </DataTrigger>
                             <DataTrigger Binding="{Binding FavouriteFolders.Count, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -34,56 +49,74 @@
                 </StackPanel.Style>
                 <TextBlock Height="22" Text="Favourite" TextWrapping="Wrap" Width="117"/>
                 <ItemsControl 
-                    ItemsSource="{Binding FavouriteFolders, UpdateSourceTrigger=PropertyChanged}"
-                    ItemTemplate="{Binding name}"/>
+                    ItemsSource="{Binding FavouriteFolders, UpdateSourceTrigger=PropertyChanged}"/>
+
             </StackPanel>
-            <cc:DriveAndFolderButton
-                Content="Games"
-                Icon="{StaticResource Folder}"/>
-            <TextBlock Height="21" Text="RemoteFolders" TextWrapping="Wrap" Width="116"/>
-            <ItemsControl 
-                ItemsSource="{Binding RemoteFolders, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Height="21" Text="Library" TextWrapping="Wrap" Width="116" />
-            <ItemsControl  
-                ItemsSource="{Binding LibraryFolders, UpdateSourceTrigger=PropertyChanged}"
-                />
-            <TextBlock Height="21" Text="Devices" TextWrapping="Wrap" Width="116" />
-            <ItemsControl  ItemsSource="{Binding ConnectedDevices, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Height="21" Text="RemoteFolders" TextWrapping="Wrap" Width="116" FontSize="14" TextAlignment="Left" HorizontalAlignment="Center" FontWeight="Bold" DataContext="{Binding GetFilesListCommand}"/>
+            <ItemsControl
+                ItemTemplate="{StaticResource ButtonFunction}"
+                ItemsSource="{Binding RemoteFolders, UpdateSourceTrigger=PropertyChanged}" Height="53" />
+
+            <TextBlock Height="21" Text="Library" TextWrapping="Wrap" Width="116" FontSize="14" FontWeight="Bold"/>
+            <ItemsControl
+                ItemTemplate="{StaticResource ButtonFunction}"
+                ItemsSource="{Binding LibraryFolders, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Height="21" Text="Devices" TextWrapping="Wrap" Width="116" FontSize="14" FontWeight="Bold"/>
+            <ItemsControl
+                ItemTemplate="{StaticResource ButtonFunction}"
+                ItemsSource="{Binding ConnectedDevices, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
-        <TextBox HorizontalAlignment="Left" Height="22" Margin="285,70,0,0" Text="{Binding CurrentDirectory, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="505"/>
-        <Button x:Name="btnBack" Content="" HorizontalAlignment="Left" Height="22" Margin="188,70,0,0" VerticalAlignment="Top" Width="26">
-            <Button.Background>
-                <ImageBrush ImageSource="/left-arrow-png-favpng-6Gwhnr9LgVfP33gZFFkJDnSni.jpg"/>
-            </Button.Background>
-        </Button>
-        <Button x:Name="btnForward" Content="" HorizontalAlignment="Left" Height="22" Margin="219,70,0,0" VerticalAlignment="Top" Width="27" RenderTransformOrigin="0.5,0.5">
-            <Button.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="179.021"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Button.RenderTransform>
-            <Button.Background>
-                <ImageBrush ImageSource="/left-arrow-png-favpng-6Gwhnr9LgVfP33gZFFkJDnSni.jpg"/>
-            </Button.Background>
-        </Button>
-        <Button Content="Button" HorizontalAlignment="Left" Height="22" Margin="251,70,0,0" VerticalAlignment="Top" Width="30"/>
-        <TextBox x:Name="txtSearch" HorizontalAlignment="Left" Height="19" Margin="621,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="169"/>
-        <TextBox HorizontalAlignment="Left" Height="19" Margin="559,46,0,0" Text="Search" TextWrapping="Wrap" VerticalAlignment="Top" Width="57"/>
-        <ListView x:Name="listView" HorizontalAlignment="Left" Height="334" Margin="200,100,0,0" 
-                  VerticalAlignment="Top" Width="590" 
+        <TextBox x:Name="AddressBar" HorizontalAlignment="Left" Height="22" Margin="224,50,0,0"  
+                 Text="{Binding CurrentDirectory, UpdateSourceTrigger=PropertyChanged}" 
+                 TextWrapping="Wrap"
+                 VerticalAlignment="Top" 
+                 Width="676">
+            <TextBox.InputBindings>
+                <KeyBinding 
+                    Key="Enter"
+                    Command="{Binding NavigateToPath}"
+                    CommandParameter="{Binding Text, ElementName=AddressBar}"/>
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <ListView Grid.Row="6"
+                  x:Name="ListViewControl" 
+                  HorizontalAlignment="Left"
+                  Background="Transparent"
+                  Height="358" Margin="200,72,0,0" 
+                  VerticalAlignment="Top" Width="700" 
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  SelectionMode="Extended" ItemsSource="{Binding NavigationFolderFiles, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{Binding name, UpdateSourceTrigger=PropertyChanged}">
+                  SelectedItem="{Binding Mode=OneWay}"
+                  BorderBrush="Black"
+                  SelectionMode="Extended" 
+                  ItemsSource="{Binding NavigationFolderFiles, UpdateSourceTrigger=PropertyChanged}">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="MouseDoubleClick">
+                    <b:InvokeCommandAction 
+                        Command="{Binding GetFilesListCommand}" 
+                        CommandParameter="{Binding SelectedItem, ElementName=ListViewControl}"/>
+                </b:EventTrigger>
+                <b:EventTrigger EventName="SelectionChanged">
+                    <b:InvokeCommandAction 
+                        Command="{Binding GetFilesListCommand}" 
+                        CommandParameter="{Binding SelectedItem, ElementName=ListViewControl}"/>
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
                 </GridView>
-            </ListView.View>
 
+            </ListView.View>
         </ListView>
+        <Button x:Name="adressButton" Content="" HorizontalAlignment="Left" Height="22" Margin="200,50,0,0" VerticalAlignment="Top" Width="24">
+            <Button.Background>
+                <ImageBrush ImageSource="/computer-icon.png"/>
+            </Button.Background>
+        </Button>
+        <Image HorizontalAlignment="Center" Height="50" VerticalAlignment="Top" Width="900" Source="/ocean-3605547__480.jpg" Stretch="UniformToFill"/>
 
     </Grid>
 </Window>

@@ -8,11 +8,10 @@ namespace Manager.Commmands
     public class Commands : ICommand
     {
         private readonly Action _action;
-        private Func<object> p;
 
-        public Commands(Func<object> p)
+        public Commands(Action action)
         {
-            this.p = p;
+            _action= action;
         }
 
         public bool CanExecute(object parameter)

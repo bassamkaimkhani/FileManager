@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="computer-icon.png" />
+    <None Remove="copy.jpg" />
     <None Remove="left-arrow-png-favpng-6Gwhnr9LgVfP33gZFFkJDnSni.jpg" />
+    <None Remove="ocean-3605547__480.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,10 +19,14 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
     <PackageReference Include="Syroot.Windows.IO.KnownFolders" Version="1.2.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="computer-icon.png" />
+    <Resource Include="copy.jpg" />
+    <Resource Include="ocean-3605547__480.jpg" />
     <Resource Include="Resource\Icons.xaml" />
     <Resource Include="left-arrow-png-favpng-6Gwhnr9LgVfP33gZFFkJDnSni.jpg" />
   </ItemGroup>
